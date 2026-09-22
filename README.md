@@ -1,51 +1,52 @@
-# Django ToDo list
+# Django ToDo List - Kubernetes Deployment
 
-This is a to-do list web application with the basic features of most web apps, i.e., accounts/login, API, and interactive UI. To do this task, you will need:
+A to-do list web application deployed to Kubernetes with auto-scaling capabilities.
 
-- CSS | [Skeleton](http://getskeleton.com/)
-- JS  | [jQuery](https://jquery.com/)
+## Project Overview
+Django-based ToDo application with user authentication, REST API, and interactive UI.
+This is a Kubernetes deployment project from Mate Academy demonstrating production-ready configurations.
 
-## Explore
+## What I Implemented
+- **Kubernetes Deployment** with RollingUpdate strategy
+- **Horizontal Pod Autoscaler (HPA)** - scales between 2-5 pods based on CPU and Memory
+- **Resource management** - properly configured requests and limits
+- **Namespace isolation** - deployed in `mateapp` namespace
+- **Complete deployment instructions** with reasoning for all choices
 
-Try it out by installing the requirements (the following commands work only with Python 3.8 and higher, due to Django 4):
+## Technologies
+- Django 4+
+- Kubernetes (Deployments, HPA, Services)
+- Docker
+- Python 3.8+
 
-```
+## Key Features
+- Rolling updates with zero downtime
+- Auto-scaling based on CPU (70%) and Memory (80%) metrics
+- Resource-aware pod scheduling
+- Proper liveness and readiness probes
+
+## Quick Start (Local Development)
+```bash
 pip install -r requirements.txt
-```
-
-Create a database schema:
-
-```
 python manage.py migrate
-```
-
-And then start the server (default is http://localhost:8000):
-
-```
 python manage.py runserver
 ```
 
-You can now browse the [API](http://localhost:8000/api/) or start on the [landing page](http://localhost:8000/).
+## Kubernetes Deployment
+```bash
+kubectl create namespace mateapp
+kubectl apply -f deployment.yml
+kubectl apply -f hpa.yml
+kubectl port-forward svc/todolist 8000:8000 -n mateapp
+```
 
-## Task
+## Project Structure
+- `deployment.yml` - Kubernetes Deployment manifest with rolling updates
+- `hpa.yml` - Horizontal Pod Autoscaler configuration
+- `INSTRUCTION.md` - Detailed deployment guide with reasoning
 
-Create a Kubernetes manifest for a pod that will contain a ToDo app container:
-
-1. Fork this repository.
-1. Create a `deployment.yml` file with a deployment for the app.
-1. Deployment should have
-    1. Strategy: RollingUpdate
-    1. Resource requests and limits (in the idle state you should have 2 pods running)
-    1. Pod spec should be same as for pods manifest
-1. Create a `hpa.yml` file with a Horizontal Pod Autoscaler for the app.
-1. Autoscaler should define
-    1. Minimum number of pods as 2
-    2. Maximum number of pods as 5
-    3. Autoscale should be triggered by both CPU and Memory
-1. Both new manifests should belong to `mateapp` namespace
-1. `INSTRUCTION.md` should be created with the instructions on how to deploy the app to k8s
-1. `INSTRUCTION.md` Should have explained your choice of resource requests and limits
-1. `INSTRUCTION.md` Should have explained your choice of HPA configuration
-1. `INSTRUCTION.md` Should have explained your strategy configuration (Why such numbers)
-1. `INSTRUCTION.md` Should have explained how to access the app after deployment
-1. Create PR with your changes and attach it for validation on a platform.
+## Key Learnings
+- Deployment strategies and zero-downtime updates
+- Resource management and pod scheduling
+- Auto-scaling based on metrics
+- Namespace isolation and RBAC concepts
